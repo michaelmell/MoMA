@@ -37,16 +37,19 @@ public class IlpSolutionSanityChecker {
         Set<AbstractAssignment<Hypothesis<Component<FloatType, ?>>>> incomingAssignments = ilp.getOptimalAssignments(t - 1);
         Set<AbstractAssignment<Hypothesis<Component<FloatType, ?>>>> outgoingAssignments = ilp.getOptimalAssignments(t);
         Set<ExitAssignment> incomingExitAssignments = ilp.getEdgeSets().getAssignmentsOfType(incomingAssignments, ExitAssignment.class);
+        Set<LysisAssignment> incomingLysisAssignments = ilp.getEdgeSets().getAssignmentsOfType(incomingAssignments, LysisAssignment.class);
         Set<DivisionAssignment> incomingDivisionAssignments = ilp.getEdgeSets().getAssignmentsOfType(incomingAssignments, DivisionAssignment.class);
         int incomingExitCount = incomingExitAssignments.size();
+        int incomingLysisCount = incomingLysisAssignments.size();
         int incomingDivisionCount = incomingDivisionAssignments.size();
         int incomingTotalCount = incomingAssignments.size();
         int outgoingTotalCount = outgoingAssignments.size();
-        if (outgoingTotalCount - incomingDivisionCount != (incomingTotalCount - incomingExitCount)){
+        if (outgoingTotalCount - incomingDivisionCount != (incomingTotalCount - incomingExitCount - incomingLysisCount)){
             System.out.println(String.format("ERROR: Continuity constraint violation at t=%d", t));
             System.out.println(String.format("incoming total: %d", incomingTotalCount));
             System.out.println(String.format("outgoing total: %d", outgoingTotalCount));
             System.out.println(String.format("incoming exit: %d", incomingExitCount));
+            System.out.println(String.format("incoming lysis: %d", incomingLysisCount));
             System.out.println(String.format("incoming division: %d", incomingDivisionCount));
         }
     }

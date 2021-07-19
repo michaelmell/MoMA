@@ -12,7 +12,9 @@ public class MoMATest {
     public static void main(String[] args){
         MoMATest tests = new MoMATest();
         // TODO-MM-20191120: User tmin and tmax instead of having multiple duplicated datasets, with different frame-ranges.
-        tests._lis_20210303__Pos0_GL14();
+        tests._lysing_cell__thomas_20200922__Pos0_GL30();
+//        tests._lysing_cell__thomas_20200922__Pos16_GL17();
+//        tests._lis_20210303__Pos0_GL14();
 //        tests._theo__20210126_glc_spcm_1__Pos1_GL15();
 //        tests._theo__20210126_glc_spcm_1__Pos1_GL14();
 //        tests._20190515_hi1_med1_med2_rpmB_glu_gly_7_chr_rpmB_curated__dataset__Pos25_GL1();
@@ -46,6 +48,25 @@ public class MoMATest {
 //        -i
 ///home/micha/Documents/01_work/git/MoMA/test_datasets/Dany_synthetic_rich_media/420200403_5_rpmB_1_rrnB_synthrich7_1_MMStack_Pos13_preproc_GL16.tif
 
+
+    @Test
+    public void _lysing_cell__thomas_20200922__Pos0_GL30() {
+        String inputPath = "/home/micha/Documents/01_work/git/MoMA/test_datasets/000_moma_benchmarking/problem_cases/lysing_cell_inside_gl/thomas_20200922/Pos0_GL30/cropped__20200922_M9glc_VNG1040-hi2_AB_1_MMStack_Pos0_GL30.tiff";
+        String outputPath = "/home/micha/Documents/01_work/git/MoMA/test_datasets/000_moma_benchmarking/problem_cases/lysing_cell_inside_gl/thomas_20200922/Pos0_GL30/output/";
+        Integer tmin = 120;
+        Integer tmax = 140;
+        startMoma(inputPath, outputPath, tmin, tmax);
+//        startMoma(inputPath, outputPath);
+    }
+
+    @Test
+    public void _lysing_cell__thomas_20200922__Pos16_GL17() {
+        String inputPath = "/home/micha/Documents/01_work/git/MoMA/test_datasets/000_moma_benchmarking/problem_cases/lysing_cell_inside_gl/thomas_20200922/Pos16_GL17/cropped__20200922_M9glc_VNG1040-hi2_AB_1_MMStack_Pos16_GL17.tiff";
+        String outputPath = "/home/micha/Documents/01_work/git/MoMA/test_datasets/000_moma_benchmarking/problem_cases/lysing_cell_inside_gl/thomas_20200922/Pos16_GL17/output/";
+        Integer tmin = 110;
+        Integer tmax = 140;
+        startMoma(inputPath, outputPath, tmin, tmax);
+    }
 
     @Test
     public void _lis_20210303__Pos0_GL14() {

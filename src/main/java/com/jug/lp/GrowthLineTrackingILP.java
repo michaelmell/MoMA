@@ -50,8 +50,10 @@ public class GrowthLineTrackingILP {
 	public static final int ASSIGNMENT_EXIT = 0;
 	public static final int ASSIGNMENT_MAPPING = 1;
 	public static final int ASSIGNMENT_DIVISION = 2;
+	public static final int ASSIGNMENT_LYSIS = 3;
 
 	public static final float CUTOFF_COST = Float.MAX_VALUE; // TODO-PARAMETRIZE: This value is critical(!): Assignments with costs higher than this value will be ignored. This should become a parameter at some point!
+	public static final float LYSIS_ASSIGNMENT_COST = 10; // NOTE: This value is set so high, that it will not be considered for assignment during optimization. However, it can be forced during curation.
 
 	private static GRBEnv env;
 
@@ -291,7 +293,32 @@ public class GrowthLineTrackingILP {
 		addMappingAssignments( timeStep, sourceComponentTree, targetComponentTree  );
 		addDivisionAssignments( timeStep, sourceComponentTree, targetComponentTree );
 		addExitAssignments( timeStep, nodes.getHypothesesAt( timeStep ) );
+		addLysisAssignments( timeStep, nodes.getHypothesesAt( timeStep ) );
 		this.reportProgress();
+	}
+
+	/**
+	 * Add an lysis-assignment at time t to a bunch of segmentation hypotheses.
+	 *
+	 * @param t
+	 *            the time-point.
+	 * @param hyps
+	 *            a list of hypothesis for which an <code>ExitAssignment</code>
+	 *            should be added.
+	 * @throws GRBException
+	 */
+	private void addLysisAssignments( final int t, final List< Hypothesis< Component< FloatType, ? >>> hyps ) throws GRBException {
+		if ( hyps == null ) return; // edge case?!
+
+		float cost;
+		for ( final Hypothesis< Component< FloatType, ? >> hyp : hyps ) {
+			cost = LYSIS_ASSIGNMENT_COST;
+
+			final GRBVar newLPVar = model.addVar( 0.0, 1.0, cost, GRB.BINARY, String.format( "a_%d^LYSIS--%d", t, hyp.getId() ) );
+			final LysisAssignment ea = new LysisAssignment(newLPVar, this, nodes, edgeSets, hyp );
+			nodes.addAssignment( t, ea );
+			edgeSets.addToRightNeighborhood( hyp, ea ); // relevant for continuity constraint (and probably other things(?))
+		}
 	}
 
 	/**

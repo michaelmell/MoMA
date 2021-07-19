@@ -31,6 +31,7 @@ public class AssignmentsEditorViewer extends JTabbedPane implements ChangeListen
     private AssignmentsEditorCanvasView inactiveMappingAssignments;
     private AssignmentsEditorCanvasView inactiveDivisionAssignments;
     private AssignmentsEditorCanvasView inactiveExitAssignments;
+    private AssignmentsEditorCanvasView inactiveLysisAssignments;
     private AssignmentsEditorCanvasView fixedAssignments;
     private int curTabIdx = 0;
     private JPanel nextHackTab;
@@ -65,14 +66,15 @@ public class AssignmentsEditorViewer extends JTabbedPane implements ChangeListen
         inactiveMappingAssignments = new AssignmentsEditorCanvasView(height, gui);
         inactiveDivisionAssignments = new AssignmentsEditorCanvasView(height, gui);
         inactiveExitAssignments = new AssignmentsEditorCanvasView(height, gui);
+        inactiveLysisAssignments = new AssignmentsEditorCanvasView(height, gui);
         fixedAssignments = new AssignmentsEditorCanvasView(height, gui);
 
         // Hack to enable non-Mac MoMA to only use one row of tabs
         nextHackTab = new JPanel();
         final JComponent[] tabsToRoll =
-                {activeAssignments, inactiveMappingAssignments, inactiveDivisionAssignments, inactiveExitAssignments, fixedAssignments};
+                {activeAssignments, inactiveMappingAssignments, inactiveDivisionAssignments, inactiveExitAssignments, inactiveLysisAssignments, fixedAssignments};
         final String[] namesToRoll =
-                {"OPT", "M", "D", "E", "GT"};
+                {"OPT", "M", "D", "E", "L", "GT"};
         final AssignmentsEditorViewer me = this;
         final ChangeListener changeListener = changeEvent -> {
             final JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
@@ -90,6 +92,7 @@ public class AssignmentsEditorViewer extends JTabbedPane implements ChangeListen
         inactiveMappingAssignments.display(GrowthLineTrackingILP.filterAssignmentsWithPredicate(data, aa -> aa.getType() == GrowthLineTrackingILP.ASSIGNMENT_MAPPING));
         inactiveDivisionAssignments.display(GrowthLineTrackingILP.filterAssignmentsWithPredicate(data, aa -> aa.getType() == GrowthLineTrackingILP.ASSIGNMENT_DIVISION));
         inactiveExitAssignments.display(GrowthLineTrackingILP.filterAssignmentsWithPredicate(data, aa -> aa.getType() == GrowthLineTrackingILP.ASSIGNMENT_EXIT));
+        inactiveLysisAssignments.display(GrowthLineTrackingILP.filterAssignmentsWithPredicate(data, aa -> aa.getType() == GrowthLineTrackingILP.ASSIGNMENT_LYSIS));
         fixedAssignments.setData(GrowthLineTrackingILP.filterAssignmentsWithPredicate(data, aa -> aa.isGroundTruth() || aa.isGroundUntruth()));
 
         if (!OSValidator.isMac()) {
@@ -123,6 +126,7 @@ public class AssignmentsEditorViewer extends JTabbedPane implements ChangeListen
             inactiveMappingAssignments.setData(GrowthLineTrackingILP.filterAssignmentsWithPredicate(hashMap, aa -> aa.getType() == GrowthLineTrackingILP.ASSIGNMENT_MAPPING));
             inactiveDivisionAssignments.setData(GrowthLineTrackingILP.filterAssignmentsWithPredicate(hashMap, aa -> aa.getType() == GrowthLineTrackingILP.ASSIGNMENT_DIVISION));
             inactiveExitAssignments.setData(GrowthLineTrackingILP.filterAssignmentsWithPredicate(hashMap, aa -> aa.getType() == GrowthLineTrackingILP.ASSIGNMENT_EXIT));
+            inactiveLysisAssignments.setData(GrowthLineTrackingILP.filterAssignmentsWithPredicate(hashMap, aa -> aa.getType() == GrowthLineTrackingILP.ASSIGNMENT_LYSIS));
         }
         fixedAssignments.setData(GrowthLineTrackingILP.filterAssignmentsWithPredicate(hashMap, aa -> aa.isGroundTruth() || aa.isGroundUntruth()));
         activeAssignments.setData(GrowthLineTrackingILP.getActiveAssignments(hashMap));
@@ -142,6 +146,8 @@ public class AssignmentsEditorViewer extends JTabbedPane implements ChangeListen
             inactiveDivisionAssignments.setData(GrowthLineTrackingILP.filterAssignmentsWithPredicate(data, aa -> aa.getType() == GrowthLineTrackingILP.ASSIGNMENT_DIVISION));
         } else if (this.getSelectedComponent().equals(inactiveExitAssignments)) {
             inactiveExitAssignments.setData(GrowthLineTrackingILP.filterAssignmentsWithPredicate(data, aa -> aa.getType() == GrowthLineTrackingILP.ASSIGNMENT_EXIT));
+        } else if (this.getSelectedComponent().equals(inactiveLysisAssignments)) {
+            inactiveLysisAssignments.setData(GrowthLineTrackingILP.filterAssignmentsWithPredicate(data, aa -> aa.getType() == GrowthLineTrackingILP.ASSIGNMENT_LYSIS));
         } else {
             fixedAssignments.setData(GrowthLineTrackingILP.filterAssignmentsWithPredicate(data, aa -> aa.isGroundTruth() || aa.isGroundUntruth()));
         }

@@ -282,6 +282,9 @@ public class AssignmentsEditorCanvasView extends JComponent implements MouseInpu
                 else if (assignment.getType() == GrowthLineTrackingILP.ASSIGNMENT_EXIT) {
                     assignmentViews.add(new ExitAssignmentView((ExitAssignment) assignment, width, ASSIGNMENT_DISPLAY_OFFSET));
                 }
+                else if (assignment.getType() == GrowthLineTrackingILP.ASSIGNMENT_LYSIS) {
+                    assignmentViews.add(new LysisAssignmentView((LysisAssignment) assignment, width, ASSIGNMENT_DISPLAY_OFFSET));
+                }
             }
         }
         sortAssignmentViews(assignmentViews);
